@@ -1,68 +1,53 @@
-import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
-
-interface CatModel {
-	weight: { imperial: string; metric: string };
-	id: string;
-	name: string;
-	cfa_url: string;
-	vetstreet_url: string;
-	vcahospitals_url: string;
-	temperament: string;
-	origin: string;
-	country_codes: string;
-	country_code: string;
-	description: string;
-	life_span: string;
-	indoor: number;
-	lap: number;
-	alt_names: string;
-	adaptability: number;
-	affection_level: number;
-	child_friendly: number;
-	dog_friendly: number;
-	energy_level: number;
-	grooming: number;
-	health_issues: number;
-	intelligence: number;
-	shedding_level: number;
-	social_needs: number;
-	stranger_friendly: number;
-	vocalisation: number;
-	experimental: number;
-	hairless: number;
-	natural: number;
-	rare: number;
-	rex: number;
-	suppressed_tail: number;
-	short_legs: number;
-	wikipedia_url: string;
-	hypoallergenic: number;
-	reference_image_id: string;
-	image?: {
-		id: string;
-		width: number;
-		height: number;
-		url: string;
-	};
-}
+import {
+	createApi,
+	fetchBaseQuery,
+	BaseQueryFn,
+	FetchArgs,
+	FetchBaseQueryError,
+	QueryReturnValue,
+	FetchBaseQueryMeta,
+} from '@reduxjs/toolkit/query/react';
+import { ICatModel } from '../types/cats-types';
 
 const baseQuery = fetchBaseQuery({
-	baseUrl: "/",
+	baseUrl: 'https://api.thecatapi.com/v1/',
 });
 
-const baseQueryWithRetry = async (args: any, api: any, extraOptions: any) => {
-	let result = await baseQuery(args, api, extraOptions);
-	if (result.error) {
-		await new Promise((resolve) => setTimeout(resolve, 1000));
+const baseQueryWithRetry: BaseQueryFn<
+	string | FetchArgs,
+	unknown,
+	FetchBaseQueryError,
+	object,
+	FetchBaseQueryMeta
+> = async (args, api, extraOptions) => {
+	const MAX_RETRIES = 5;
+	let retryCount = 0;
+
+	let result: QueryReturnValue<unknown, FetchBaseQueryError, FetchBaseQueryMeta>;
+	while (retryCount < MAX_RETRIES) {
 		result = await baseQuery(args, api, extraOptions);
+		retryCount++;
+
+		if (result.data) {
+			return result;
+		}
+
+		if (retryCount < MAX_RETRIES) {
+			await new Promise(resolve => setTimeout(resolve, 1000));
+		}
 	}
-	return result;
+
+	return result!;
 };
 
 export const catsApi = createApi({
-	reducerPath: "catsApi",
+	reducerPath: 'catsApi',
 	baseQuery: baseQueryWithRetry,
-	endpoints: (builder) => ({}),
+	endpoints: builder => ({
+		getBreeds: builder.query<ICatModel[], void>({
+			query: () => 'breeds',
+		}),
+	}),
 });
 
-export const {} = catsApi;
+export const { useGetBreedsQuery } = catsApi;

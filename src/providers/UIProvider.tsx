@@ -1,7 +1,7 @@
-import React, { useEffect } from "react";
-import "preline/preline";
-import { IStaticMethods } from "preline/preline";
-import { useLocation } from "react-router";
+import React, { useEffect } from 'react';
+import 'preline/preline';
+import { IStaticMethods } from 'preline/preline';
+import { useLocation } from 'react-router';
 
 declare global {
 	interface Window {
