@@ -29,7 +29,7 @@ export const Header: React.FC<HeaderProps> = ({ title = 'Coralsoft Test Task' })
 				)}
 				<button
 					onClick={toggleTheme}
-					className='py-2 px-4 hover:bg-gray-700 rounded transition-colors'
+					className='py-2 px-4 hover:bg-gray-700 rounded transition-colors min-w-32'
 				>
 					{theme === 'light' ? 'Dark Mode' : 'Light Mode'}
 				</button>

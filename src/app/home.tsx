@@ -178,13 +178,13 @@ const HomePage: FC = () => {
 									<BarChartComponent
 										data={adaptabilityData}
 										title='Adaptability Distribution'
-										fill='#0088FE'
+										colorVariant={1}
 										dataKey='value'
 									/>
 									<BarChartComponent
 										data={affectionData}
 										title='Affection Levels'
-										fill='#00C49F'
+										colorVariant={2}
 										dataKey='value'
 									/>
 									<PieChartComponent data={originData} title='Top Origins' />

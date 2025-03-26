@@ -28,21 +28,28 @@ const COLORS: string[] = [
 	'#B833FF',
 ];
 
+const TOOLTIP_STYLES = {
+	light: {
+		backgroundColor: '#FFFFFF',
+		color: '#4B5563',
+	},
+	dark: {
+		backgroundColor: '#1F2937',
+		color: '#E5E7EB',
+	},
+};
+
+const CHART_WRAPPER_COLORS = {
+	light: '#374151',
+	dark: '#E5E7EB',
+};
+
 const PieChartComponent: FC<IProps> = ({ title, data }) => {
 	const { theme } = useTheme();
-	const tooltipContentStyles =
-		theme === 'dark'
-			? {
-					backgroundColor: '#1F2937',
-					color: '#E5E7EB',
-			  }
-			: {
-					backgroundColor: '#FFFFFF',
-					color: '#374151',
-			  };
+	const tooltipContentStyles = theme === 'dark' ? TOOLTIP_STYLES.dark : TOOLTIP_STYLES.light;
 
 	const wrapperStyles = {
-		color: theme === 'dark' ? '#E5E7EB' : '#374151',
+		color: theme === 'dark' ? CHART_WRAPPER_COLORS.dark : CHART_WRAPPER_COLORS.light,
 	};
 
 	return (
