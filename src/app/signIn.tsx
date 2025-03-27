@@ -1,10 +1,11 @@
-import React, { FC, useState } from 'react';
+import React, { FC, useEffect, useState } from 'react';
 import { useActions } from '../hooks/useActions';
-import { useSelector } from 'react-redux';
 import { getAuthState } from '../store/auth/authSelectors';
 import { Header } from '../components/Header';
 import FormTextField from '../components/ui/FormTextField';
 import { validateEmail } from '../utils/validateEmail';
+import { useAppSelector } from '../store/store';
+import { useNavigate } from 'react-router';
 
 interface IState {
 	email: string;
@@ -17,8 +18,9 @@ interface IValidationErrors {
 }
 
 const SignInPage: FC = () => {
+	const navigate = useNavigate();
 	const { loginStart, loginSuccess, loginFailure } = useActions();
-	const { loading, error } = useSelector(getAuthState);
+	const { loading, error, isAuthenticated } = useAppSelector(getAuthState);
 	const [state, setState] = useState<IState>({ email: '', password: '' });
 	const [validationErrors, setValidationErrors] = useState<IValidationErrors>({});
 	const { email, password } = state;
@@ -69,6 +71,12 @@ const SignInPage: FC = () => {
 		}
 	};
 
+	useEffect(() => {
+		if (isAuthenticated) {
+			navigate('/');
+		}
+	}, [isAuthenticated, navigate]);
+
 	return (
 		<div className='min-h-screen bg-gray-50 dark:bg-gray-900 flex flex-col'>
 			<Header title='Coralsoft Test Task' />
@@ -99,7 +107,7 @@ const SignInPage: FC = () => {
 						<button
 							type='submit'
 							disabled={loading}
-							className='w-full py-3 px-4 text-sm font-semibold rounded-lg bg-blue-600 text-white hover:bg-blue-700 disabled:opacity-50 disabled:cursor-not-allowed dark:bg-blue-500 dark:hover:bg-blue-600'
+							className='w-full py-3 px-4 text-sm font-semibold rounded-lg bg-blue-600 text-white hover:bg-blue-700 disabled:opacity-50 disabled:cursor-not-allowed dark:bg-blue-500 dark:hover:bg-blue-600 cursor-pointer'
 						>
 							{loading ? 'Loading...' : 'Sign in'}
 						</button>

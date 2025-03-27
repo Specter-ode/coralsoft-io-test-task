@@ -10,9 +10,16 @@ import PieChartComponent from '../components/charts/PieChartComponent';
 import LinearChartComponent from '../components/charts/LinearChartComponent';
 import Loader from '../components/Loader';
 import { ICatModel } from '../types/cats-types';
+import { useAppSelector } from '../store/store';
+import { getIsAuth } from '../store/auth/authSelectors';
+import { useNavigate } from 'react-router';
 
 const HomePage: FC = () => {
-	const { data, isLoading, error, isSuccess } = useGetBreedsQuery();
+	const navigate = useNavigate();
+	const isAuthenticated = useAppSelector(getIsAuth);
+	const { data, isLoading, error, isSuccess } = useGetBreedsQuery(undefined, {
+		skip: !isAuthenticated,
+	});
 	const [showCharts, setShowCharts] = useState(true);
 	const [filterOrigin, setFilterOrigin] = useState<string[]>([]);
 	const [sortBy, setSortBy] = useState<SortCriterion>('name');
@@ -140,18 +147,22 @@ const HomePage: FC = () => {
 			origins,
 		};
 	}, [sortedCats]);
-
 	useEffect(() => {
-		if (!isLoading && isSuccess) {
+		if (!isAuthenticated) {
+			navigate('/sign-in');
+		}
+	}, [isAuthenticated, navigate]);
+	useEffect(() => {
+		if (!isLoading && isSuccess && isAuthenticated) {
 			window.HSStaticMethods.autoInit();
 		}
-	}, [isLoading, isSuccess]);
+	}, [isLoading, isSuccess, isAuthenticated]);
 
 	return (
 		<div className='min-h-screen bg-gray-50 dark:bg-gray-900 flex flex-col'>
 			<Header title='Cat Breeds' />
 			<main className='container mx-auto px-4 py-8 flex-1 relative'>
-				{isLoading ? (
+				{isLoading || !isAuthenticated ? (
 					<Loader />
 				) : error ? (
 					<p className='absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 text-red-500'>

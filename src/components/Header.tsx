@@ -1,5 +1,5 @@
 import React from 'react';
-import { useSelector } from 'react-redux';
+import { useAppSelector } from '../store/store';
 import { useActions } from '../hooks/useActions';
 import { getIsAuth } from '../store/auth/authSelectors';
 import { useTheme } from '../hooks/useTheme';
@@ -9,7 +9,7 @@ interface HeaderProps {
 }
 
 export const Header: React.FC<HeaderProps> = ({ title = 'Coralsoft Test Task' }) => {
-	const isAuthenticated = useSelector(getIsAuth);
+	const isAuthenticated = useAppSelector(getIsAuth);
 	const { logout } = useActions();
 	const { theme, toggleTheme } = useTheme();
 	const handleLogout = (): void => {
