@@ -35,7 +35,7 @@ const TOOLTIP_STYLES = {
 	},
 	dark: {
 		backgroundColor: '#1F2937',
-		color: '#E5E7EB',
+		color: '#ffffff',
 	},
 };
 
@@ -69,7 +69,7 @@ const PieChartComponent: FC<IProps> = ({ title, data }) => {
 							<Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
 						))}
 					</Pie>
-					<Tooltip contentStyle={tooltipContentStyles} />
+					<Tooltip itemStyle={tooltipContentStyles} contentStyle={tooltipContentStyles} />
 					{data?.length <= 5 && <Legend wrapperStyle={wrapperStyles} />}
 				</PieChart>
 			</ResponsiveContainer>

@@ -34,10 +34,8 @@ const HomePage: FC = () => {
 
 	const handleSortChange = (newSortBy: SortCriterion) => {
 		if (newSortBy === sortBy) {
-			// Если кликнули на ту же опцию, переключаем направление
 			setSortOrder(prevOrder => (prevOrder === 'asc' ? 'desc' : 'asc'));
 		} else {
-			// Если выбрана новая опция, устанавливаем её и сортировку по убыванию
 			setSortBy(newSortBy);
 			setSortOrder('desc');
 		}
@@ -94,11 +92,11 @@ const HomePage: FC = () => {
 		const affectionData: ChartDataType = [];
 		const lifeSpanData: ChartDataType = [];
 		const originData: ChartDataType = [];
-		const indoorData = [
+		const indoorData: ChartDataType = [
 			{ name: 'Indoor', value: 0 },
 			{ name: 'Outdoor', value: 0 },
 		];
-		const lapData = [
+		const lapData: ChartDataType = [
 			{ name: 'Lap Cat', value: 0 },
 			{ name: 'Not Lap Cat', value: 0 },
 		];
